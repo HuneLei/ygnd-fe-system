@@ -1,53 +1,105 @@
 <!-- 导航页面 -->
 <template>
-  <div>
-    <Button>Default</Button>
-    <Button type="primary" @click.native="textButton">Primary</Button>
-    <Button type="dashed" @click.native="textButtons">Dashed</Button>
-    <Button type="text">Text</Button>
-    <br><br>
-    <Button type="info">Info</Button>
-    <Button type="success">Success</Button>
-    <Button type="warning">Warning</Button>
-    <Button type="error">Error</Button>
-  </div>
+    <div class="layout">
+        <Layout :style="{minHeight: '100vh'}">
+            <Header>
+                <y-header></y-header>
+            </Header>
+            <Layout>
+                <Sider ref="side1"
+                       hide-trigger
+                       collapsible
+                       :collapsed-width="78"
+                       v-model="isCollapsed">
+                    <YSider></YSider>
+                </Sider>
+                <y-main></y-main>
+            </Layout>
+        </Layout>
+    </div>
 </template>
 
 <script>
-import text from '../../../api/text';
+import YHeader from './YHeader.vue';
+import YSider from './YSider.vue';
+import YMain from './YMain.vue';
 
 export default {
-  created() { },
-  mounted() { },
-  computed: {},
-  components: {},
+  created() {},
+  computed: {
+    rotateIcon() {
+      return ['menu-icon', this.isCollapsed ? 'rotate-icon' : ''];
+    },
+    menuitemClasses() {
+      return ['menu-item', this.isCollapsed ? 'collapsed-menu' : ''];
+    },
+  },
+  components: {
+    YMain,
+    YSider,
+    YHeader,
+  },
   data() {
     return {
+      isCollapsed: false,
     };
   },
   methods: {
-    textButton() {
-      text.text(123).then((res) => {
-        console.log(222)
-        console.log('res', res)
-      }).catch((err) => {
-        console.log('err', err)
-      })
-      text.text(456).then((data) => {
-        console.log(333)
-        console.log('data', data)
-      })
-      console.log(66666)
-    },
-    textButtons() {
-      console.log(222)
-      text.text2(123).then((res) => {
-        console.log('res', res)
-      })
+    collapsedSider() {
+      this.$refs.side1.toggleCollapse();
     }
   },
 };
 </script>
 
 <style scoped>
+.layout {
+  border: 1px solid #d7dde4;
+  background: #f5f7f9;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.layout-header-bar {
+  background: #fff;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.layout-logo-left {
+  width: 90%;
+  height: 30px;
+  background: #5b6270;
+  border-radius: 3px;
+  margin: 15px auto;
+}
+.menu-icon {
+  transition: all 0.3s;
+}
+.rotate-icon {
+  transform: rotate(-90deg);
+}
+.menu-item span {
+  display: inline-block;
+  overflow: hidden;
+  width: 69px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+  transition: width 0.2s ease 0.2s;
+}
+.menu-item i {
+  transform: translateX(0px);
+  transition: font-size 0.2s ease, transform 0.2s ease;
+  vertical-align: middle;
+  font-size: 16px;
+}
+.collapsed-menu span {
+  width: 0px;
+  transition: width 0.2s ease;
+}
+.collapsed-menu i {
+  transform: translateX(5px);
+  transition: font-size 0.2s ease 0.2s, transform 0.2s ease 0.2s;
+  vertical-align: middle;
+  font-size: 22px;
+}
 </style>

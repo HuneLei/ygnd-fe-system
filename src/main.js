@@ -3,6 +3,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import './iview-ui';
+import './assets/theme/index.less';
 
 import config from './config';
 import store from './vuex/store';

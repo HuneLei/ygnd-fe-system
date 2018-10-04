@@ -50,7 +50,7 @@ module.exports = {
     'no-param-reassign': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
-    "import/newline-after-import": 0,
+    'import/newline-after-import': 0,
     'import/no-dynamic-require': 0,
     'no-console': 0,
     'linebreak-style': 0,
@@ -59,5 +59,6 @@ module.exports = {
     'no-mixed-operators': 'off',
     'max-len': [1, 200],
     'no-shadow': ['error', { allow: ['state'] }],
+    'vue/no-parsing-error': [2, { 'x-invalid-end-tag': false }],
   },
 };
