@@ -1,98 +1,91 @@
 <!-- 侧边栏 -->
 <template>
-    <Menu active-name="1-2"
-          theme="dark"
-          width="auto"
-          :class="menuitemClasses">
-        <MenuItem name="1-1">
-        <Icon type="ios-navigate"></Icon>
-        <span>Option 1</span>
-        </MenuItem>
-        <MenuItem name="1-2">
-        <Icon type="search"></Icon>
-        <span>Option 2</span>
-        </MenuItem>
-        <MenuItem name="1-3">
-        <Icon type="settings"></Icon>
-        <span>Option 3</span>
-        </MenuItem>
-    </Menu>
+  <Menu active-name="1-2"
+        theme="light"
+        width="auto">
+    <MenuItem name="1">
+    <Icon type="ios-navigate"></Icon>
+    <span>首页</span>
+    </MenuItem>
+    <Submenu v-for="(item, index) in menuList"
+             :key="item.name"
+             :name="index + 2">
+      <template slot="title">
+        <Icon :type="item.icon"></Icon>
+        <span>{{item.name}}</span>
+      </template>
+      <MenuItem v-for="(childitem, childindex) in item.children"
+        :name='`${index + 2}-${childindex + 1}`'
+        :key="childitem.name">{{childitem.name}}</MenuItem>
+    </Submenu>
+  </Menu>
 </template>
 
 <script>
+import baseList from '../baseList'; //  左侧菜单栏
+
 export default {
-  props: {
-    isCollapsed: {
-      type: Boolean,
-      default: false,
-    },
-  },
+  props: {},
   data() {
-    return {};
+    return {
+      allList: baseList.menuList, //  左侧菜单全部的
+    };
+  },
+  mounted() {
+    console.log('menuList', this.menuList);
   },
   components: {},
   computed: {
-    menuitemClasses: () => [
-      'menu-item',
-      this.isCollapsed ? 'collapsed-menu' : '',
-    ],
+    //  根据权限接口获得的左菜单权限
+    menuJson() {
+      return this.$store.state.view.menuList;
+    },
+    //  会员信息
+    memberInfo() {
+      return this.$store.state.view.principal;
+    },
+    //  根据权限给人看的左侧菜单
+    menuList() {
+      const menuList = [];
+      const menuJson = this.menuJson;
+      const memberType = this.memberInfo.memberType;
+      const menuKeys = Object.keys(menuJson);
+      console.log('menuKeys', menuKeys);
+      for (let i = 0; i < this.allList.length; i += 1) {
+        const menuItem = this.allList[i];
+        const itemChildren = [];
+
+        if (menuItem.path === '/index') {
+          menuList.push(menuItem);
+        } else if (menuKeys.indexOf(menuItem.name) > -1) {
+          for (let j = 0; j < menuItem.children.length; j += 1) {
+            const item = menuItem.children[j];
+            if (
+              item.type.indexOf(memberType) > -1 &&
+              menuJson[menuItem.name].indexOf(item.name) > -1
+            ) {
+              itemChildren.push({
+                path: item.path,
+                name: item.name,
+              });
+            }
+          }
+        }
+        if (itemChildren.length > 0) {
+          menuList.push({
+            path: menuItem.path,
+            name: menuItem.name,
+            icon: menuItem.icon,
+            children: itemChildren,
+          });
+        }
+      }
+
+      return menuList;
+    },
   },
   methods: {},
 };
 </script>
 <style scoped>
-.menu-item span {
-  display: inline-block;
-  overflow: hidden;
-  width: 69px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
-  transition: width 0.2s ease 0.2s;
-}
-.menu-item i {
-  transform: translateX(0px);
-  transition: font-size 0.2s ease, transform 0.2s ease;
-  vertical-align: middle;
-  font-size: 16px;
-}
-.collapsed-menu span {
-  width: 0px;
-  transition: width 0.2s ease;
-}
-.collapsed-menu i {
-  transform: translateX(5px);
-  transition: font-size 0.2s ease 0.2s, transform 0.2s ease 0.2s;
-  vertical-align: middle;
-  font-size: 22px;
-}
-.layout-con {
-  height: 100%;
-  width: 100%;
-}
-.menu-item span {
-  display: inline-block;
-  overflow: hidden;
-  width: 69px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  vertical-align: bottom;
-  transition: width 0.2s ease 0.2s;
-}
-.menu-item i {
-  transform: translateX(0px);
-  transition: font-size 0.2s ease, transform 0.2s ease;
-  vertical-align: middle;
-  font-size: 16px;
-}
-.collapsed-menu span {
-  width: 0px;
-  transition: width 0.2s ease;
-}
-.collapsed-menu i {
-  transform: translateX(5px);
-  transition: font-size 0.2s ease 0.2s, transform 0.2s ease 0.2s;
-  vertical-align: middle;
-  font-size: 22px;
-}
 </style>
