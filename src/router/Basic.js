@@ -4,6 +4,7 @@ const Home = (resolve) => require(['../views/Basic/Home'], resolve);
 
 export default {
   path: '/',
+  redirect: '/index',
   component: Layout,
   children: [
     {

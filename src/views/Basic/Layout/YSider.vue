@@ -1,22 +1,16 @@
 <!-- 侧边栏 -->
 <template>
-  <Menu active-name="1-2"
-        theme="light"
-        width="auto">
-    <MenuItem name="1">
+  <Menu :active-name="menuActiveName" :open-names='menuOpenName' theme="light" width="auto">
+    <MenuItem name='/index' :to="'/index'">
     <Icon type="ios-navigate"></Icon>
     <span>首页</span>
     </MenuItem>
-    <Submenu v-for="(item, index) in menuList"
-             :key="item.name"
-             :name="index + 2">
+    <Submenu v-for="item in menuList" :key="item.name" :name="item.path">
       <template slot="title">
         <Icon :type="item.icon"></Icon>
         <span>{{item.name}}</span>
       </template>
-      <MenuItem v-for="(childitem, childindex) in item.children"
-        :name='`${index + 2}-${childindex + 1}`'
-        :key="childitem.name">{{childitem.name}}</MenuItem>
+      <MenuItem v-for="childitem in item.children" :name='childitem.path' :key="childitem.name" :to="childitem.path" v-text="childitem.name"></MenuItem>
     </Submenu>
   </Menu>
 </template>
@@ -36,6 +30,14 @@ export default {
   },
   components: {},
   computed: {
+    // 左边栏展开项
+    menuOpenName() {
+      return this.$store.getters.getMenuOpenName;
+    },
+    // 左边栏选择项
+    menuActiveName() {
+      return this.$store.getters.getMenuActiveName;
+    },
     //  根据权限接口获得的左菜单权限
     menuJson() {
       return this.$store.state.view.menuList;
@@ -55,7 +57,7 @@ export default {
         const menuItem = this.allList[i];
         const itemChildren = [];
 
-        if (menuItem.path === '/index') {
+        if (menuItem.parent === '/index') {
           menuList.push(menuItem);
         } else if (menuKeys.indexOf(menuItem.name) > -1) {
           for (let j = 0; j < menuItem.children.length; j += 1) {
@@ -76,6 +78,7 @@ export default {
             path: menuItem.path,
             name: menuItem.name,
             icon: menuItem.icon,
+            parent: menuItem.parent,
             children: itemChildren,
           });
         }

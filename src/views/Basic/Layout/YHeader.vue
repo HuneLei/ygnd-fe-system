@@ -1,21 +1,16 @@
 <!-- 导航头部组件 -->
 <template>
-  <Menu mode="horizontal"
-        theme="dark"
-        active-name="1"
-        @on-select='onSelect'>
+  <Menu mode="horizontal" theme="dark" active-name="1" @on-select='onSelect'>
     <!-- 导航栏的logo -->
     <div class="layout-logo">
       <img src="../../../assets/img/u2082.png" alt="">
       <div>镇江阳光农贷后台管理系统</div>
     </div>
     <div class="layout-nav">
-      <MenuItem class="item_name" name="1">
-      王某某
+      <MenuItem class="item_name" name="1"> 王某某
       </MenuItem>
       <span class="boun_dary">|</span>
-      <MenuItem class="item_exit" name="2">
-      退出系统
+      <MenuItem class="item_exit" name="2"> 退出系统
       </MenuItem>
     </div>
   </Menu>

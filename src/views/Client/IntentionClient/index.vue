@@ -1,6 +1,6 @@
-<!-- 首页 -->
+<!-- 意向客户 -->
 <template>
-  <div>首页</div>
+  <div>意向客户</div>
 </template>
 
 <script>
@@ -11,12 +11,21 @@ export default {
       {
         path: '/index',
         name: '首页',
+      },
+      {
+        path: '/Client',
+        name: '客户管理',
+        noLink: true,
+      },
+      {
+        path: '/Client/IntentionClient',
+        name: '意向客户',
         noLink: true,
       },
     ]);
   },
-  created() {},
-  mounted() {},
+  created() { },
+  mounted() { },
   computed: {},
   components: {},
   data() {

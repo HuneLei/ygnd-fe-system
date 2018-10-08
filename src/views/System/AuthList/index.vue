@@ -1,6 +1,6 @@
-<!-- 首页 -->
+<!-- 权限清单 -->
 <template>
-  <div>首页</div>
+  <div>权限清单</div>
 </template>
 
 <script>
@@ -11,6 +11,15 @@ export default {
       {
         path: '/index',
         name: '首页',
+      },
+      {
+        path: '/System',
+        name: '系统管理',
+        noLink: true,
+      },
+      {
+        path: '/System/AuthList',
+        name: '权限清单',
         noLink: true,
       },
     ]);
